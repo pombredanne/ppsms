@@ -1,0 +1,98 @@
+<!--
+<?php
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">简单发送</a></div></div>
+        <div class="main_content"><form>
+		        <div class="page_title">
+                        <h1>简单发送</h1>
+                </div>
+                <div class="item">
+                		<div class="item_title">接收号码：</div>
+                        <div class="item_body"><textarea name="receiver"></textarea></div>
+                        <div class="item_remarks">
+                        	一行一个手机号码<br>
+                            共 <span class="num">30</span> 个号码
+                        </div>
+                </div>
+                <div class="item">
+                		<div class="item_title">短信内容：</div>
+                        <div class="item_body"><textarea data-output="message_size" data-maxsize="500" sms_length="$sms_length" name="message"></textarea></div>
+                        <div class="item_remarks">
+                        插入<a href="#">常用短语</a> 或 <a href="#">签名</a><br>
+                        一条短信为 $sms_length 个字符<br>
+                        字数：<span class="num" id="message_size">32</span> 个，共 <span class="num" id="message_size_msg">0</span> 条短信
+                        </div>
+						<script type="text/javascript" src="$webdb[www_url]/plugin/jquery.maxlength.js"></script>
+                </div>
+                <div class="item">
+                		<div class="item_title">是否定时发送短信：</div>
+                        <div class="item_body"><label><input name="time" type="radio" value="true"> &nbsp;是</label><label><input checked name="time" type="radio" value="false"> &nbsp;否</label>
+                        <br>设置：<input readonly="readonly" name="time_date" type="text" plugin="date" /> &nbsp; <select name="time_hh">
+<option>00</option>
+<option>01</option>
+<option>02</option>
+<option>03</option>
+<option>04</option>
+<option>05</option>
+<option>06</option>
+<option>07</option>
+<option>08</option>
+<option>09</option>
+<option>10</option>
+<option>11</option>
+<option>12</option>
+<option>13</option>
+<option>14</option>
+<option>15</option>
+<option>16</option>
+<option>17</option>
+<option>18</option>
+<option>19</option>
+<option>20</option>
+<option>21</option>
+<option>22</option>
+<option>23</option>
+</select> 时 <select name="time_ii">
+<option>00</option>
+<option>05</option>
+<option>10</option>
+<option>15</option>
+<option>20</option>
+<option>25</option>
+<option>30</option>
+<option>35</option>
+<option>40</option>
+<option>45</option>
+<option>50</option>
+<option>55</option>
+</select> 分
+<!--日期控件 开始-->
+<script type="text/javascript" src="$webdb[www_url]/plugin/jquery.datepick.package-4.0.5/jquery.datepick.js"></script>
+<link href="$webdb[www_url]/plugin/jquery.datepick.package-4.0.5/jquery.datepick-adobe.css" rel="stylesheet" type="text/css" />
+<!--日期控件 结束-->
+                        </div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">发送短信</a>
+                        </div>
+                </div>
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

@@ -1,0 +1,80 @@
+<!--
+<?php
+$type||$type="query";
+$sub_menu[$type]="select";
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">余额查询</a></div></div>
+        <div class="main_content"><form><input type="hidden" name="action" value="$type">
+		        <div class="page_title">
+                        <h1>余额查询</h1>
+                        <a href="$webdb[www_url]/money" class="$sub_menu[query]">查询余额</a>
+                        <a href="?type=list" class="$sub_menu[list]">交易明细记录</a>
+                </div>
+<!--
+EOT;
+if($type=="query"){
+$lfjdb[money_out]=$lfjdb[money]/100;
+print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title"> 您的当前余额为 <span style="color:#FF0000; font-weight:bolder">$lfjdb[money_out]</span> 元 &nbsp; <a href="?type=list" title="">交易记录</a></div>
+                </div> 
+<!--
+EOT;
+}else{print <<<EOT
+-->
+				<div class="item">   
+<table width="100%" class="item_table">
+<tr>
+<th>编号</th>
+<th>交易时间</th>
+<th>金额（元）</th>
+<th>摘要</th>
+</tr>
+<!--
+EOT;
+$listdb=get_my_moneylog();
+$list_sum=count($listdb);
+foreach($listdb AS $key=>$rs){
+$rs[money_out]=$rs[money]>0?"<span class='green'>$rs[money]</span>":"<span class='red'>$rs[money]</span>";
+print <<<EOT
+-->
+<tr>
+<td>$rs[id]</td>
+<td>$rs[posttime]</td>
+<td>$rs[money_out]</td>
+<td>$rs[about]</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+							<div class="item_tab_op">
+                                <span class="pages">$list_sum 条记录</span>
+                            </div>
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

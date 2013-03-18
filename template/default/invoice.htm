@@ -1,0 +1,143 @@
+<!--
+<?php
+$type||$type="apply";
+$sub_menu[$type]="select";
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">发票申请</a></div></div>
+        <div class="main_content"><form><input type="hidden" name="action" value="$type">
+		        <div class="page_title">
+                        <h1>发票申请</h1>
+                        <a href="$webdb[www_url]/invoice" class="$sub_menu[apply]">申请发票</a>
+                        <a href="?type=list" class="$sub_menu[list]">申请记录</a>
+                </div>
+                <div class="sub_title">技巧提示</div>
+                <ul class="help_tips">
+                        <li>发票的快递费将直接从您的账号余额中扣除，请您确认账号下有足够的余额，发票于每周五统一开具并快递。</li>
+                        <li>您在拍拍送共计消费 $pay_sum 元，已开发票 $invoice_sum 元，还可以再开 $invoice_can 元的发票。</li>
+                </ul>
+<!--
+EOT;
+if($type=="apply"){print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">发票类型</div>
+                        <div class="item_body">
+                        <label><input checked name="postdb[type]" type="radio" value="企业"> &nbsp;企业</label>
+                        <label><input name="postdb[type]" type="radio" value="个人"> &nbsp;个人</label>
+                        </div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">发票抬头</div>
+                        <div class="item_body"><input type="text" name="postdb[title]" /></div>
+                        <div class="item_remarks">企业请填公司名称，个人请填姓名</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">发票金额</div>
+                        <div class="item_body"><input type="text" name="postdb[money]" value="$invoice_can" /></div>
+                        <div class="item_remarks">元</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">邮递方式</div>
+                        <div class="item_body">
+                        <label><input checked name="postdb[express_type]" type="radio" value="0"> &nbsp;快递到付</label>
+                        <label><input name="postdb[express_type]" type="radio" value="12"> &nbsp;江浙沪12元 </label>
+                        <label><input name="postdb[express_type]" type="radio" value="22"> &nbsp;非江浙沪22元 </label>
+                        </div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">纳税人识别号</div>
+                        <div class="item_body"><input type="text" name="postdb[tax]" /></div>
+                        <div class="item_remarks">企业必须填写否则不能开发票，个人没有可不填</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">发票内容</div>
+                        <div class="item_body"><input type="text" name="postdb[content]" /></div>
+                        <div class="item_remarks">如：信息服务费</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">收件人姓名</div>
+                        <div class="item_body"><input type="text" name="postdb[receiver]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">收件人电话</div>
+                        <div class="item_body"><input type="text" name="postdb[receiver_tel]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">收件人地址</div>
+                        <div class="item_body"><input type="text" name="postdb[receiver_add]" /></div>
+                        <div class="item_remarks">请具体到XX路XX室XX号</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">备注</div>
+                        <div class="item_body"><input type="text" name="postdb[remarks]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" name="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+<!--
+EOT;
+}else{print <<<EOT
+-->
+				<div class="item">   
+<table width="100%" class="item_table">
+<tr>
+<th>编号</th>
+<th>申请时间</th>
+<th>审核状态</th>
+<th>发票抬头</th>
+<th>发票金额（元）</th>
+</tr>
+<!--
+EOT;
+$listdb=get_my_invoices();
+$list_sum=count($listdb);
+foreach($listdb AS $key=>$rs){
+print <<<EOT
+-->
+<tr class="ajax_delete_$rs[inid]">
+<td>$rs[inid]</td>
+<td>$rs[posttime]</td>
+<td>$rs[state_out]</td>
+<td>$rs[title]</td>
+<td>$rs[money]</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+							<div class="item_tab_op">
+                                <span class="pages">$list_sum 条记录</span>
+                            </div>
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

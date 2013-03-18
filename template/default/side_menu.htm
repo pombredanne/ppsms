@@ -1,0 +1,63 @@
+<!--
+<?php
+$left_menu_out=get_left_menu();//function in do/global.php
+print <<<EOT
+-->
+<div class="head">
+	<img src="$webdb[www_url]/images/logo.gif" />
+    <div class="welcome">你好，{$lfjid} 欢迎您回来 | <a href="$webdb[www_url]/exit">退出</a></div>
+</div>
+<div class="side">
+	<div class="side_menu">
+    	<a submenu="1" href="#" class="select">菜单</a>
+        <a submenu="2" href="#">帮助</a>
+    </div>
+    <div class="side_content">
+    	<div submenu="1">
+<script type="text/javascript">
+		d = new dTree('d');
+		d.config.useIcons = false;
+		d.config.useSelection = false;
+		d.config.useLines = false;
+		$left_menu_out;
+		document.write(d);
+</script>
+    	</div>
+        <div submenu="2" style="display:none">
+<script type="text/javascript">
+		d_help = new dTree('d_help');
+		d_help.config.useIcons = false;
+		d_help.config.useSelection = false;
+		d_help.config.useLines = false;
+		d_help.add(0,-1,'菜单');
+		d_help.add(1,0,"<strong>操作问题</strong>","#");
+		d_help.add(2,1,"如何发送？","#");
+		d_help.add(3,1,"如何导入群发？","#");
+		d_help.add(4,1,"为什么发送不成功","#");
+		d_help.add(5,1,"什么是客户关系管理","#");
+		d_help.add(6,0,"<strong>充值问题</strong>","#");
+		d_help.add(7,6,"什么是定时短信","#");
+		d_help.add(8,6,"什么是节日计划","#");
+		d_help.add(9,6,"什么是发送记录","#");
+		d_help.add(10,6,"数据统计分析","#");
+		d_help.add(11,0,"<strong>账户问题</strong>","#");
+		d_help.add(12,11,"什么是充值记录","#");
+		d_help.add(13,11,"什么是余额查询","#");
+		d_help.add(14,11,"什么是发票申请","#");
+		document.write(d_help);
+</script>
+        </div>
+    </div>
+    <script type="text/javascript">
+	$(function(){
+			   $("div.side_menu a").click(function(){
+							$("div.side_menu a").removeClass("select");
+							$("div.side_content div[submenu]").hide().filter("[submenu='"+$(this).addClass("select").attr("submenu")+"']").show();
+				});
+	});
+	</script>
+</div>
+<!--
+EOT;
+?>
+-->

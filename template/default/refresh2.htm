@@ -1,0 +1,30 @@
+<!--
+<?php
+print <<<EOT
+-->
+<meta http-equiv='refresh' CONTENT='$time;URL=$url'>
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+  <div class="location">
+    <div><a href='$webdb[www_url]/'>拍拍送</a> <img src='$webdb[www_url]/images/location_arrow.gif' /> <a href="#">自动跳转</a></div>
+  </div>
+  <div class="main_content">
+      <div class="page_title">
+        <h1>拍拍送提示</h1>
+      </div>
+      <div class="infobox">
+          <br>
+          <div style="line-height:26px"><span class="refresh2">$msg</span><br><a href='$url' class='index_font'>如果您的浏览器没有自动跳转,请点击这里</a></div>
+        <br>
+      </div>
+  </div>
+</div>
+</body>
+<!--
+EOT;
+?>

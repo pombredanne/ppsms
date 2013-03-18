@@ -1,0 +1,127 @@
+<!--
+<?php
+$type||$type="account";
+$sub_menu[$type]="select";
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">账户信息设置</a></div></div>
+        <div class="main_content"><form><input type="hidden" name="postdb[type]" value="$type" />
+		        <div class="page_title">
+                        <h1>账户信息设置</h1>
+                        <a href="$webdb[www_url]/account" class="$sub_menu[account]">个人信息</a>
+                        <a href="?type=contact" class="$sub_menu[contact]">联系方式</a>
+                        <a href="?type=password" class="$sub_menu[password]">修改密码</a>
+                </div>
+<!--
+EOT;
+if($type=="account"){
+$ipunt_idcard_out=$ipunt_idcard?"不可修改姓名，因为您已通过实名认证":"请填写真实姓名以便实名认证";
+print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">姓名：</div>
+                        <div class="item_body"><input type="text" name="postdb[truename]" value="$lfjdb[truename]" $ipunt_idcard /></div>
+                        <div class="item_remarks">$ipunt_idcard_out</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">性别：</div>
+                        <div class="item_body">
+<label><input type="radio" name="postdb[sex]" value="1" $sexdb[1]> &nbsp;男</label> 
+<label><input type="radio" name="postdb[sex]" value="2" $sexdb[2]> &nbsp;女</label> 
+<label><input type="radio" name="postdb[sex]" value="0" $sexdb[0]> &nbsp;保密</label>
+                        </div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">公司名称：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$lfjdb[company]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">所属部门：</div>
+                        <div class="item_body"><input type="text" name="postdb[dept]" value="$lfjdb[dept]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">职位名称：</div>
+                        <div class="item_body"><input type="text" name="postdb[job]" value="$lfjdb[job]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+<!--
+EOT;
+}else if($type=="contact"){
+print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">电话：</div>
+                        <div class="item_body"><input type="text" name="postdb[telephone]" value="$lfjdb[telephone]" /></div>
+                        <div class="item_remarks">格式：区号-号码-分机 （021-64250000-0000）</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">QQ：</div>
+                        <div class="item_body"><input type="text" name="postdb[oicq]" value="$lfjdb[oicq]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">MSN：</div>
+                        <div class="item_body"><input type="text" name="postdb[msn]" value="$lfjdb[msn]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">邮编：</div>
+                        <div class="item_body"><input type="text" name="postdb[postalcode]" value="$lfjdb[postalcode]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">联系地址：</div>
+                        <div class="item_body"><input type="text" name="postdb[address]" value="$lfjdb[address]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+<!--
+EOT;
+}else if($type=="password"){
+print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">新密码：</div>
+                        <div class="item_body"><input type="password" name="postdb[password]" value="" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">重复输入密码：</div>
+                        <div class="item_body"><input type="password" name="postdb[password2]" value="" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">旧密码：</div>
+                        <div class="item_body"><input type="password" name="postdb[old_password]" value="" /></div>
+                        <div class="item_remarks">修改密码必须输入旧密码</div>
+                </div>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

@@ -1,0 +1,72 @@
+<!--
+<?php
+$order=="posttime"&&$posttime_out="select";
+$order=="sendtime"&&$sendtime_out="select";
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">等待发送列表</a></div></div>
+        <div class="main_content"><form>
+		        <div class="page_title">
+                        <h1>等待发送列表</h1>
+                        <a href="?order=posttime" class="$posttime_out">按创建时间排列</a>
+                        <a href="?order=sendtime" class="$sendtime_out">按定时发送时间排列</a>
+                </div>
+                <div class="item">   
+<table width="100%" class="item_table">
+<tr>
+<th></th>
+<th>编号</th>
+<th>创建时间</th>
+<th>接收号码</th>
+<th width="400">短信内容</th>
+<th>定时发送时间</th>
+<th>取消</th>
+</tr>
+<!--
+EOT;
+$list_sum=count($listdb);
+foreach($listdb AS $key=>$rs){
+$rs[receiver]=cut_end_str($rs[receiver],',');
+$rs[receiver_out]=get_word($rs[receiver],20);
+$rs[message_out]=get_word($rs[message],30);
+print <<<EOT
+-->
+<tr class="ajax_delete_$rs[slid]">
+<td align="left"><input name="slids[]" value="$rs[slid]" type="checkbox" /></td>
+<td>$rs[slid]</td>
+<td>$rs[posttime]</td>
+<td><a href="javascript:void" name="receiver_$key" title="$rs[receiver]">$rs[receiver_out]</a><span class="gray">（$rs[receiver_num]位）</span></td>
+<td align="left"><a href="javascript:void" name="message_$key" title="$rs[message]">$rs[message_out]</a><span class="gray">（$rs[message_words]字）</span></td>
+<td>$rs[sendtime]</td>
+<td><a href="javascript:void(0)" ajax_delete="$rs[slid]" ajax_alert="您确定要取消这条在 $rs[sendtime] 定时发送的短信吗？">取消发送</a></td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+							<div class="item_tab_op">
+                        		<input name="action" value="cancel" type="checkbox" checked /> <label for="action">取消发送</label>
+                        		<a id="ajax_submit" name="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                                <span class="pages">$list_sum 条记录</span>
+                            </div>
+</div>
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

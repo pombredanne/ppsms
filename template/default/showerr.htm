@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--<?php
+$button_out=$lfjid?"返回首页":"用户登录";
+print <<<EOT
+-->
+<head>
+<title>$titleDB[title]</title>
+<script type="text/javascript" src="$webdb[www_url]/images/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="$webdb[www_url]/images/dtree.js"></script>
+<link href="$webdb[www_url]/images/style.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="keywords" content="$titleDB[keywords]">
+<meta name="description" content="$titleDB[description]">
+</head>
+<body class="index">
+
+
+<div class="index_top">
+		<div class="index_top_content">
+        		<a href="$webdb[www_url]/"><img src="$webdb[www_url]/images/index_logo.gif" /></a>
+                <div class="contact">
+                		<a href="$webdb[www_url]/">首页</a> | <a href="$webdb[www_url]/help">帮助中心</a>
+                </div>
+        </div>
+</div>
+
+
+
+	
+    <div class="side_content showerr">
+    	<div class="shower_title">系统提示</div>
+        <div class="msg_blue">
+                <div></div>
+                <div>$showerrMsg</div>
+        </div>
+        <div style="text-align:center; margin:20px">
+        <a class="button" href="$webdb[www_url]/">$button_out</a>
+        <a class="button" href="javascript:window.self.close();">关闭本网页</a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+<div class="foot">
+Copyright &copy; 2012 拍拍送 PPSMS.COM 版权所有<br />
+增值电信业务经营许可证：A2.B1.B2-20090021   ICP证号：沪ICP备05001400
+</div>
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->
+</html>

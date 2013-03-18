@@ -1,0 +1,299 @@
+<!--
+<?php
+$type||$type="search";
+$sub_menu[$type]="select";
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">增值功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">客户通讯录管理</a></div></div>
+        <div class="main_content"><form><input type="hidden" name="action" value="$type">
+		        <div class="page_title">
+                        <h1>客户通讯录管理</h1>
+                        <a href="$webdb[www_url]/crm" class="$sub_menu[search]">搜索</a>
+                        <a href="?type=add" class="$sub_menu[add]">新建客户</a>
+                        <a href="?type=group" class="$sub_menu[group]">分组管理</a>
+                </div>
+<!--
+EOT;
+if($type=="search"){
+print <<<EOT
+-->
+                <div class="sub_title">技巧提示</div>
+                <ul class="help_tips">
+                        <li>通过客户通讯录管理，您可以进行编辑客户资料、分组以及删除客户等操作。</li>
+                        <li>请先根据条件搜索客户，然后选择相应的操作。</li>
+                </ul>
+                <div class="item">
+                		<div class="item_title">客户姓名：</div>
+                        <div class="item_body"><input type="text" id="truename" name="truename" /></div>
+                        <div class="item_remarks">可使用通配符 *，多个用户名用半角逗号“,”分隔</div>
+                </div>
+                <div class="item">
+                		<div class="item_title">手机号码：</div>
+                        <div class="item_body"><input type="text" name="mob" /></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">所在分组：</div>
+                        <div class="item_body">
+<select name="usergroupid[]" multiple="multiple" size="8"><option value="all">无限制</option><optgroup label="会员用户组"><option value="9" >乞丐</option>
+<option value="10" >新手上路</option>
+<option value="11" >注册会员</option>
+<option value="12" >中级会员</option>
+<option value="13" >高级会员</option>
+<option value="14" >金牌会员</option>
+<option value="15" >论坛元老</option>
+</optgroup><optgroup label="特殊管理组"><option value="16" >实习版主</option>
+<option value="17" >网站编辑</option>
+<option value="18" >信息监察员</option>
+<option value="19" >审核员</option>
+</optgroup><optgroup label="系统用户组"><option value="1" >管理员</option>
+<option value="2" >超级版主</option>
+<option value="3" >版主</option>
+<option value="4" >禁止发言</option>
+<option value="5" >禁止访问</option>
+<option value="8" >等待验证会员</option>
+</optgroup></select></div>
+                        <div class="item_remarks">设置允许参与搜索的分组，可以按住 CTRL 多选</div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="do_submit" href="$webdb[www_url]/pay?type=do" class="button">搜索</a>
+                                <script type="text/javascript">
+										$(function(){
+												   $("#do_submit").click(function(){
+																	if(parseInt($("#money").val())==$("#money").val()&&$("#money").val()>=1){
+																			window.open("$webdb[www_url]/pay?job=do&money="+$("#money").val());
+																			return true;
+																	}else{
+																			ajax_submit_add_tips($.parseJSON('{"name":"money","tips":"请填写正确的充值金额！"}'));//显示tips
+																			return false;
+																	}
+																	return false;
+													});
+										})
+								</script>
+                        </div>
+                </div>
+<!--
+EOT;
+}elseif($type=="add"){print <<<EOT
+-->
+                <div class="sub_title">重要信息</div>
+                <div class="item">
+                		<div class="item_title">客户姓名：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">手机号码：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">所在分组：</div>
+                        <div class="item_body">
+<select name="usergroupid[]" multiple="multiple" size="8"><option value="all">无限制</option><optgroup label="会员用户组"><option value="9" >乞丐</option>
+<option value="10" >新手上路</option>
+<option value="11" >注册会员</option>
+<option value="12" >中级会员</option>
+<option value="13" >高级会员</option>
+<option value="14" >金牌会员</option>
+<option value="15" >论坛元老</option>
+</optgroup><optgroup label="特殊管理组"><option value="16" >实习版主</option>
+<option value="17" >网站编辑</option>
+<option value="18" >信息监察员</option>
+<option value="19" >审核员</option>
+</optgroup><optgroup label="系统用户组"><option value="1" >管理员</option>
+<option value="2" >超级版主</option>
+<option value="3" >版主</option>
+<option value="4" >禁止发言</option>
+<option value="5" >禁止访问</option>
+<option value="8" >等待验证会员</option>
+</optgroup></select>
+                        </div>
+                        <div class="item_remarks">设置客户所在分组，可以按住 CTRL 多选</div>
+                </div>
+                <div class="sub_title">扩展信息</div>
+                <div class="item">
+                		<div class="item_title">性别：</div>
+                        <div class="item_body">
+<label><input type="radio" name="postdb[sex]" value="1" $sexdb[1]> &nbsp;男</label> 
+<label><input type="radio" name="postdb[sex]" value="2" $sexdb[2]> &nbsp;女</label> 
+<label><input type="radio" name="postdb[sex]" value="0" $sexdb[0]> &nbsp;保密</label>
+                        </div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">生日：</div>
+                        <div class="item_body"><input class="long_input" readonly name="time_date" type="text" plugin="date" />
+<!--日期控件 开始-->
+<script type="text/javascript" src="$webdb[www_url]/plugin/jquery.datepick.package-4.0.5/jquery.datepick.js"></script>
+<link href="$webdb[www_url]/plugin/jquery.datepick.package-4.0.5/jquery.datepick-adobe.css" rel="stylesheet" type="text/css" />
+<!--日期控件 结束-->
+                        </div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="sub_title">公司信息</div>
+                <div class="item">
+                		<div class="item_title">公司名称：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">所属部门：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">职位名称：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">联系地址：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">邮政编码：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="sub_title">其它信息</div>
+                <div class="item">
+                		<div class="item_title">电子邮箱：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">固定电话：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">腾讯QQ：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">MSN：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">备注：</div>
+                        <div class="item_body"><input type="text" name="postdb[company]" value="$rsdb[a]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+<!--
+EOT;
+}elseif($type=="list"){print <<<EOT
+-->
+				<div class="item">   
+<table width="100%" class="item_table">
+<tr>
+<th>编号</th>
+<th>充值时间</th>
+<th>支付状态</th>
+<th>金额（元）</th>
+<th>支付序列</th>
+</tr>
+<!--
+EOT;
+foreach($listdb AS $key=>$rs){
+print <<<EOT
+-->
+<tr>
+<td>$rs[id]</td>
+<td>$rs[posttime]</td>
+<td>$rs[ifpay]</td>
+<td>$rs[money]</td>
+<td>$rs[numcode]</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+							<div class="item_tab_op">
+                                <span class="pages">$list_sum 条记录</span>
+                            </div>
+</div>
+<!--
+EOT;
+}elseif($type=="group"){print <<<EOT
+-->
+                <div class="sub_title">技巧提示</div>
+                <ul class="help_tips">
+                        <li>分组排序的规则是,数值大的排在前面。</li>
+                        <li>删除分组后，该组下的用户不会被删除。</li>
+                </ul>
+                <div class="item">
+<table width="100%" class="item_table item_table2">
+<tr>
+<th width="25%">分组名称</th>
+<th>排序</th>
+<th>删除</th>
+<td width="20%"></td>
+</tr>
+<!--
+EOT;
+foreach($listdb AS $key=>$rs){
+$key++;
+print <<<EOT
+-->
+<tr>
+<td><div><input tabindex="$key" class="w200" type="text" name="postdb[old_group][{$rs[cgid]}][name]" value="$rs[name]" /></div></td>
+<td><input tabindex="1000$key" class="w50" type="text" name="postdb[old_group][{$rs[cgid]}][order]" value="$rs[order]" /></td>
+<td colspan="2"><a href="?action=del_group&cgid=$rs[cgid]">删除</a></td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+<tr>
+<td colspan="4"><a href="javascript:void(0)" class="addtr" addtr_html="<tr><td><input class='w200' type='text' name='postdb[new_group][]' value='' /></td><td><input class='w50' type='text' name='postdb[new_group_order][]' value='0' /></td><td colspan='2'></td></tr>">添加新分组</a></td>
+</tr>
+</table>
+<script type="text/javascript">
+$(function(){
+	//表格中A标签添加新行，可为通用
+	$("a[addtr_html]").click(function(){
+		$(this).parent().parent().before($(this).attr("addtr_html"));
+	});
+});
+</script>
+</div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+<!--
+EOT;
+}print <<<EOT
+-->
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

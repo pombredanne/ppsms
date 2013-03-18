@@ -1,0 +1,119 @@
+<!--
+<?php
+$type||$type="olpay";
+$sub_menu[$type]="select";
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">在线充值及记录</a></div></div>
+        <div class="main_content"><form><input type="hidden" name="action" value="$type">
+		        <div class="page_title">
+                        <h1>在线充值及记录</h1>
+                        <a href="$webdb[www_url]/pay" class="$sub_menu[olpay]">在线充值</a>
+                        <a href="?type=list" class="$sub_menu[list]">充值记录</a>
+                </div>
+<!--
+EOT;
+if($type=="olpay"){
+$lfjdb[money_out]=$lfjdb[money]/100;
+$sms_price_yuan=$sms_price/100;
+print <<<EOT
+-->
+                <div class="sub_title">技巧提示</div>
+                <ul class="help_tips">
+                        <li>短信价格为 $sms_price_yuan 元每条。</li>
+                        <li>您当前的余额为 $lfjdb[money_out] 元，拍拍送在线充值使用支付宝接口。</li>
+                </ul>
+                <div class="item">
+                		<div class="item_title">充值金额（元）</div>
+                        <div class="item_body"><input type="text" id="money" name="money" /></div>
+                        <div class="item_remarks">请输入您要充值的金额，金额必须为整数且至少为1元起</div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="do_submit" href="$webdb[www_url]/pay?type=do" class="button">提交</a>
+                                <script type="text/javascript">
+										$(function(){
+												   $("#do_submit").click(function(){
+																	if(parseInt($("#money").val())==$("#money").val()&&$("#money").val()>=1){
+																			window.open("$webdb[www_url]/pay?job=do&money="+$("#money").val());
+																			return true;
+																	}else{
+																			ajax_submit_add_tips($.parseJSON('{"name":"money","tips":"请填写正确的充值金额！"}'));//显示tips
+																			return false;
+																	}
+																	return false;
+													});
+										})
+								</script>
+                        </div>
+                </div>
+<!--
+EOT;
+}elseif($type=="do"){print <<<EOT
+-->
+                <div class="sub_title">登录网上银行付款</div>
+                <ul class="help_tips">
+                        <li>请在新开网银页面完成付款后选择：</li>
+                        <li>付款成功：<a href="?type=list">查看充值记录</a></li>
+                        <li>付款失败：<a href="https://cashier.alipay.com/standard/result/help.htm" target="_blank">查看支付帮助</a></li>
+                </ul>
+<!--
+EOT;
+}elseif($type=="list"){print <<<EOT
+-->
+				<div class="item">   
+<table width="100%" class="item_table">
+<tr>
+<th>编号</th>
+<th>充值时间</th>
+<th>支付状态</th>
+<th>金额（元）</th>
+<th>支付序列</th>
+</tr>
+<!--
+EOT;
+$listdb=get_my_olpay();
+$list_sum=count($listdb);
+foreach($listdb AS $key=>$rs){
+$rs[ifpay]=$rs[ifpay]?"<span class='green'>已支付<span>":"<span class='red'>未支付</span>";
+print <<<EOT
+-->
+<tr>
+<td>$rs[id]</td>
+<td>$rs[posttime]</td>
+<td>$rs[ifpay]</td>
+<td>$rs[money]</td>
+<td>$rs[numcode]</td>
+</tr>
+<!--
+EOT;
+}
+print <<<EOT
+-->
+</table>
+							<div class="item_tab_op">
+                                <span class="pages">$list_sum 条记录</span>
+                            </div>
+</div>
+<!--
+EOT;
+}print <<<EOT
+-->
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

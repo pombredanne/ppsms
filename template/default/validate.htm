@@ -1,0 +1,223 @@
+<!--
+<?php
+$type||$type="email";
+$sub_menu[$type]="select";
+print <<<EOT
+-->
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">身份验证</a></div></div>
+        <div class="main_content"><form>
+		        <div class="page_title">
+                        <h1>身份验证</h1>
+                        <a href="$webdb[www_url]/validate" class="$sub_menu[email]">邮箱验证</a>
+                        <a href="?type=mob" class="$sub_menu[mob]">手机验证</a>
+                        <a href="?type=idcard" class="$sub_menu[idcard]">实名验证</a>
+                </div>
+<!--
+EOT;
+if($type=="email"){
+$webdb[YZ_EmailMoney_msg]=money2msg($webdb[YZ_EmailMoney]);
+print <<<EOT
+-->
+                <div class="sub_title">技巧提示</div>
+                <ul class="help_tips">
+                        <li>验证邮箱，不仅可以提高信誉度，同时还可以得到 {$webdb[YZ_EmailMoney_msg]} 条短信的奖励。</li>
+<!--
+EOT;
+if(!$webdb[EditYzEmail]){print <<<EOT
+-->
+                        <li>邮箱验证之后，不可以再修改，您务必注意！</li>
+<!--
+EOT;
+}print <<<EOT
+-->
+                </ul>
+
+<!--
+EOT;
+if($lfjdb[email_yz]!=1){print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">邮箱：<input type="hidden" name="action" value="email"></div>
+                        <div class="item_body"><input type="text" name="email" value="$lfjdb[email]" /></div>
+                        <div class="item_remarks">请输入您的邮箱地址，提交后将向您的邮箱发送一封验证邮件。</div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+              <!--
+EOT;
+}else{print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title"> 您的邮箱已通过验证“<span style="color:#FF0000; font-weight:bolder">{$lfjdb[email]}</span>”</div>
+                </div> 
+              <!--
+EOT;
+}print <<<EOT
+-->
+
+
+<!--
+EOT;
+}else if($type=="mob"){
+$webdb[YZ_MobMoney_msg]=money2msg($webdb[YZ_MobMoney]);
+print <<<EOT
+-->
+                <div class="sub_title">技巧提示</div>
+                <ul class="help_tips">
+                        <li>验证手机号码，不仅可以提高信誉度，同时还可以得到 {$webdb[YZ_MobMoney_msg]} 条短信的奖励。</li>
+                        <li>手机号码,只有管理员才有权限查看,请放心。</li>
+            <!--
+EOT;
+if(!$webdb[EditYzMob]){print <<<EOT
+-->
+                        <li>手机号码之后，不可以再修改，您务必注意。</li>
+            <!--
+EOT;
+}print <<<EOT
+-->
+                </ul>
+<!--
+EOT;
+if($action=="mobphone"){print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">短信验证码：
+                        <input type="hidden" name="mobphone" value="$mobphone" />
+                        <input type="hidden" name="action" value="mobphone2" />
+                        <input type="hidden" name="md5code" value="$md5code" />
+                        </div>
+                        <div class="item_body"><input type="text" name="yznum" /></div>
+                        <div class="item_remarks">请输入您手机收到的验证码，手机接收短信可能存在延时，请耐心等候。</div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+              <!--
+EOT;
+}elseif(!$lfjdb[mob_yz]){print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">手机号码：<input type="hidden" name="action" value="mobphone" /></div>
+                        <div class="item_body"><input type="text" name="mobphone" value="$lfjdb[mobphone]" /></div>
+                        <div class="item_remarks">请输入您的手机号码，提交后将向您的手机发送一条验证短信。</div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+              <!--
+EOT;
+}else{print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">您的手机号码已通过验证“<span style="color:#FF0000; font-weight:bolder">{$lfjdb[mobphone]}</span>”</div>
+                </div> 
+              <!--
+EOT;
+}print <<<EOT
+-->
+
+
+<!--
+EOT;
+}else if($type=="idcard"){
+$webdb[YZ_IdcardMoney_msg]=money2msg($webdb[YZ_IdcardMoney]);
+print <<<EOT
+-->
+<script type="text/javascript">
+function upfile(url,name,size,ty){
+		$("#telephoneid").val(url);
+}
+</script>
+<input type="hidden" name="action" value="idcard">
+                <div class="sub_title">技巧提示</div>
+                <ul class="help_tips">
+                        <li>身份验证，不仅可以提高信誉度，同时还可以得到 {$webdb[YZ_IdcardMoney_msg]} 条短信的奖励。</li>
+                        <li>身份验证不是系统自动审核的，而是管理员人工审核的，所以您务必认真填写，否则不会被通过。</li>
+                        <li>身份证相关隐私资料,只有管理员才有权限查看,请放心。</li>
+            <!--
+EOT;
+if(!$webdb[EditYzIdcard]){print <<<EOT
+-->
+                        <li>身份成功验证之后，不可以再修改，您务必注意。</li>
+            <!--
+EOT;
+}if($lfjdb[idcard_yz]==-1){print <<<EOT
+-->
+						<li><span style="color:#FF0000; font-weight:bolder">您的资料正在审核当中，目前您还可以继续修改完善。</span></li>
+                <!--
+EOT;
+}print <<<EOT
+-->
+				</ul>
+              <!--
+EOT;
+if($lfjdb[idcard_yz]!=1){
+print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">真实姓名：</div>
+                        <div class="item_body"><input type="text" name="truename" value="$lfjdb[truename]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">身份证号码：</div>
+                        <div class="item_body"><input type="text" name="idcard"  value="$lfjdb[idcard]" /></div>
+                        <div class="item_remarks"></div>
+                </div>
+                <div class="item">
+                		<div class="item_title">身份证复印件：</div>
+                        <div class="item_body"><input type="text" name="idcardpic" id="telephoneid" readonly value="$idcardpic" /></div>
+                        <div class="item_remarks"><a href='javascript:void(0)' onclick='window.open("$webdb[www_url]/do/upfile.php?fn=upfile&dir=idcard","","width=350,height=50,top=200,left=400")'>点击上传图片</a> &nbsp; 为了顺利的通过管理员审核请上传身份证复印件。</div>
+                </div>
+                <div class="item">
+                		<div class="item_body">
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">提交</a>
+                        </div>
+                </div>
+              <!--
+EOT;
+}elseif($lfjdb[idcard_yz]==1){
+$idcardpic=tempdir("idcard/$lfjuid.jpg");
+print <<<EOT
+-->
+                <div class="item">
+                		<div class="item_title">您的身份已通过实名认证“<span style="color:#FF0000; font-weight:bolder">{$lfjdb[truename]}</span>” &nbsp; <a href="$idcardpic" target="_blank" title="$rsdb[idcardpic]">查看证件</a></div>
+                </div> 
+              <!--
+EOT;
+}print <<<EOT
+-->
+
+
+
+
+<!--
+EOT;
+}
+print <<<EOT
+-->
+        </form></div>
+</div>
+
+
+
+
+</body>
+<!--
+EOT;
+?>
+-->

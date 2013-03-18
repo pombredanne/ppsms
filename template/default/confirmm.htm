@@ -1,0 +1,39 @@
+<!--
+<?php
+print <<<EOT
+-->
+
+<body>
+<!--include
+EOT;
+@include(html("side_menu"));
+print<<<EOT
+include-->
+<div class="main">
+  <div class="location">
+    <div>$nav<a href="#">操作确认</a></div>
+  </div>
+  <div class="main_content">
+    <form method="post" action="$url">
+      <div class="page_title">
+        <h1>拍拍送提示</h1>
+      </div>
+      <div class="infobox">
+          <br>
+          <div>$showerrMsg</div>
+          <br>
+          <p class="margintop">
+            <input type="submit" class="btn" name="confirm" value="确定" />
+            &nbsp;
+            <input type="button" class="btn gray" value="取消" onClick="history.go(-1);" />
+          </p>
+        <br>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+<!--
+EOT;
+?>
+-->
