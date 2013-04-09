@@ -323,12 +323,12 @@ function get_crm_group_select($other,$defaulf=false,$show_num=true){//»ñÈ¡CRMµ±Ç
 }
 function post_sms_do($postdb){//¼òµ¥·¢ËÍºÍÍ¨Ñ¶Â¼·¢ËÍ¶ÌĞÅÂß¼­
 		global $timestamp,$db,$webdb,$lfjdb,$sms_price,$sms_length;
-		if($postdb[message]=="")die('{"name":"message","tips":"ÇëÊäÈë·¢ËÍµÄ¶ÌĞÅÄÚÈİ"}');
+		if($postdb[message]=="")die('{"name":"postdb[message]","tips":"ÇëÊäÈë·¢ËÍµÄ¶ÌĞÅÄÚÈİ"}');
 		if($postdb[time]=="true"){//ÈôÎª¶¨Ê±¶ÌĞÅÀàĞÍ
-			if(!$postdb[time_date])die('{"name":"time_date","tips":"ÇëÉèÖÃ¶¨Ê±·¢ËÍµÄÊ±¼ä"}');
+			if(!$postdb[time_date])die('{"name":"postdb[time_date]","tips":"ÇëÉèÖÃ¶¨Ê±·¢ËÍµÄÊ±¼ä"}');
 			//ÅĞ¶Ï¶¨Ê±¶ÌĞÅ±ØĞë´óÓÚµ±Ç°Ê±¼ä
 			$time_val=strtotime("$postdb[time_date] $postdb[time_hh]:$postdb[time_ii]:00");
-			if($time_val<$timestamp)die('{"name":"time_date","tips":"ÄúÉèÖÃ¶¨Ê±·¢ËÍµÄÊ±¼ä±ØĞë´óÓÚµ±Ç°Ê±¼ä"}');
+			if($time_val<$timestamp)die('{"name":"postdb[time_date]","tips":"ÄúÉèÖÃ¶¨Ê±·¢ËÍµÄÊ±¼ä±ØĞë´óÓÚµ±Ç°Ê±¼ä"}');
 			//½«¶¨Ê±·¢ËÍµÄ¶ÌĞÅ´æÔÚµÈ´ı·¢ËÍÁĞ±í
 			if($post_sms_error=post_wait_sms($postdb[receiver],$postdb[message],$time_val)){
 					die('{"name":"ajax_submit","tips":"'.$post_sms_error.'"}');
@@ -356,14 +356,12 @@ function get_receiver_array($receiver_temp){//Ğ£Ñé¹ıÂË²¢»ñÈ¡½ÓÊÕºÅÂë£¬²ÎÊıÎªÊı×é
 				}else if(strlen($value)<11){
 						die('{"name":"postdb[receiver]","tips":"½ÓÊÕºÅÂë£º'.$value.' µÄ³¤¶ÈÎª'.strlen($value).'Î»²»×ã11Î»"}');
 				}
-				if(preg_match("/^13[0-9]{9}$|15[0-9]{9}$|18[0-9]{9}$/",$value)){//¹æÔò£ºËùÓĞ13¡¢15¡¢18¿ªÍ·µÄËùÓĞ11Î»Êı×Ö
-						//·ûºÏ
-				}else{
-						//²»·ûºÏ
-						die('{"name":"receiver","tips":"½ÓÊÕºÅÂë£º'.$value.' ²»·ûºÏºÅÂë¹æÔò"}');
+				if(!preg_match("/^13[0-9]{9}$|15[0-9]{9}$|18[0-9]{9}$/",$value)){//¹æÔò£ºËùÓĞ13¡¢15¡¢18¿ªÍ·µÄËùÓĞ11Î»Êı×Ö
+						die('{"name":"postdb[receiver]","tips":"½ÓÊÕºÅÂë£º'.$value.' ²»·ûºÏºÅÂë¹æÔò"}');
 				}
 				$receiver_arr[]=$value;
 		}
+		if(!$receiver_arr)die('{"name":"postdb[receiver]","tips":"ÇëÌîĞ´ÕıÈ·µÄÊÖ»úºÅÂë"}');
 		return $receiver_arr;
 }
 
