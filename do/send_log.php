@@ -10,14 +10,14 @@ if($job=="post"){
 		if($action!="cancel")die('{"name":"action","tips":"请指定批量操作类型！"}');
 		$db->query("UPDATE {$pre}sms_list SET state='取消发送' WHERE slid IN (".implode(",",$slids).") AND username='$lfjid' ");
 		die('{"name":"ok","tips":"已成功取消 '.count($slids).' 条等待发送的短信！"}');//url为可选参数，若有值页面提交完成后将转向该url
-}
-if($job=="delete"){
+}elseif($job=="delete"){
 		if(!$id)die('{"name":"error","tips":"操作失败，删除对象的id未传递！"}');
 		$db->query("UPDATE {$pre}sms_list SET state='取消发送' WHERE slid='$id' AND username='$lfjid' ");
 		die('{"name":"ok"}');
 }
+
 $state=get_ajax($state);
-$t_SQL2=$t_SQL="WHERE username = '$lfjid' AND state <> '删除' ";
+$t_SQL2=$t_SQL="WHERE state<>'等待发送' AND username = '$lfjid' AND state <> '删除' ";
 if($state){
     $t_SQL.=" AND  state LIKE '$state' ";//财务类型
 }

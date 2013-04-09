@@ -41,12 +41,77 @@ $sms_length=70;
 
 
 
-
+function send_sms($mobile,$content){//发送短信接口配置
+	return send_sms_by_test($mobile,$content);
+	//send_sms_by_51jje($mobile,$content);
+	//send_sms_by_opplink($mobile,$content);
+}
+function send_sms_by_test($mobile,$content){//测试短信发送接口
+		global $webdb;
+		require_once(ROOT_PATH."inc/class.mail.php");
+		$smtp = new smtp($webdb[MailServer],$webdb[MailPort],true,$webdb[MailId],$webdb[MailPw]);
+		$smtp->debug = false;
+		if($smtp->sendmail($webdb[MailId],$webdb[MailId],"$mobile","$content", "HTML"))
+		{
+			return false;
+		}else{
+			return "发送邮件，发生错误!";
+		}
+}
+//成都家家E短信接口
+function send_sms_by_51jje($mobile,$content){
+	if(!$mobile||!$content)return;
+	$url="http://www.51jje.com/sp.do?spName=WEB_SENDSMSW&P01=61198999&P02=0&P03=61198999&P04={$mobile}&P05=".urlencode($content);
+	if( !$msg=sockOpenUrl($url) ){
+		return '短信发送失败，连接短信服务器失败！';
+	}
+	if($msg!=''&&strstr($msg,"提交完毕")){
+		return 'ok';
+	}else{
+		return '短信发送失败，请稍候再试！';
+	}
+}
+//opplink短信接口
+function send_sms_by_opplink($mobile,$content){
+	global $sms_username,$sms_password;
+	if(!$mobile||!$content)return;
+	$client = new SoapClient("http://www.opptarget.com/api/WebService.asmx?WSDL");//使用 wsdl方式
+	$parameters=array(
+		"username"=>$sms_username,
+		"password"=>$sms_password,
+		"message"=>iconv('gb2312','UTF-8',$content),
+		"mobileList"=>$mobile
+	);
+	try{
+		$result = $client->SendSMS($parameters);
+	}catch(SoapFault $exception) {
+		return '短信发送异常，异常原因是：'.$exception;
+	}
+	$msg=$result->SendSMSResult;
+	if($msg=="OK")return 'ok';
+	else{
+		if($msg!=''&&strstr("msg".$msg,"OK.")){
+			return 'ok';
+		}else{
+			return '短信发送失败，原因是：'.$result->SendSMSResult;
+		}
+	}
+}
 //去掉最后一个特定字符，如果存在这个特定字符
 function cut_end_str($str,$cutstr=','){
 	if($str{strlen($str)-1}==$cutstr)
 	$str=substr($str,0,strlen($str)-1);
 	return $str;
+}
+//去掉开头一个特定字符，如果存在这个特定字符
+function cut_start_str($str,$cutstr=','){
+	if($str{0}==$cutstr)
+	$str=substr($str,1);
+	return $str;
+}
+//去掉开头一个特定字符，如果存在这个特定字符
+function cut_side_str($str,$cutstr=','){
+	return cut_start_str(cut_end_str($str,$cutstr),$cutstr);
 }
 //返回有颜色的状态函数
 function state_color($str){
@@ -60,6 +125,23 @@ function state_color($str){
 	}else if(in_array($str,$orange)){
 			return "<span class='orange'>$str</span>";
 	}else return $str;
+}
+//selse转换函数		参数：选项字符串，select其它参数，默认值支持多个值
+function make_select($arr,$other,$defvalue){
+    $arrs=explode("|",$arr);
+    $select="<select $other>";
+    foreach($arrs AS $key=>$rs){
+        $select.=strstr($defvalue."|",$rs."|")?"<option selected=\"selected\">$rs</option>":"<option>$rs</option>";
+    }
+    return $select."</select>";
+}
+//radio转换函数		参数：选项字符串，radio其它参数，默认值
+function make_radio($arr,$other,$defvalue){
+    $arrs=explode("|",$arr);
+    foreach($arrs AS $key=>$rs){
+        $select.=$rs==$defvalue?"<label><input $other checked='checked' type='radio' value='$rs'>$rs </label>":"<label><input $other type='radio' value='$rs'>$rs </label>";
+    }
+    return $select;
 }
 //注册用户
 function reg_user($username,$password){
@@ -132,7 +214,7 @@ function get_left_menu(){//获取左侧菜单代码
 		}
 		return $left_menu_out;
 }
-function post_sms($receivers_arr,$message,$send_time){//将需要发送的短信存入等待发送列表
+function post_wait_sms($receivers_arr,$message,$send_time){//将需要发送的短信存入等待发送列表
 		global $db,$pre,$lfjdb,$onlineip,$timestamp,$sms_price,$sms_length;
 		//短信换行占两个字符问题
 		//余额是否足够支付，扣除余额
@@ -140,7 +222,7 @@ function post_sms($receivers_arr,$message,$send_time){//将需要发送的短信存入等待
 		$sms_num=(int)(($sms_words-1)/$sms_length)+1;//短信条数
 		$cost_num=count($receivers_arr)*$sms_num;//发送短信总数量
 		$send_money=$cost_num*$sms_price;//需要支付的费用
-		if($lfjdb[money]<$send_money)return mb_strlen($message,'UTF8')."您的账号余额为".($lfjdb[money]/100)."元，本次发送{$sms_num}条短信，需要支付".($send_money/100)."元，请至少充值".(($send_money-$lfjdb[money])/100)."元";
+		if($lfjdb[money]<$send_money)return "您的账号余额为".($lfjdb[money]/100)."元，本次发送{$sms_num}条短信，需要支付".($send_money/100)."元，请至少充值".(($send_money-$lfjdb[money])/100)."元";
 		//从当前帐户中减掉 $send_money 分
 		add_user($lfjdb[uid],$send_money*-1,"发送{$cost_num}条短信");
 		//插入到待发送列表
@@ -212,4 +294,77 @@ function get_my_olpay($uid){//获取我的在线充值记录
 	}
 	return $listdb;
 }
+function get_rsdb($table,$table_id){
+	global $lfjid,$db,$pre;
+	$rsdb=$db->get_one("SELECT * FROM {$pre}$table WHERE username='$lfjid' AND $table_id ");
+	if(!$rsdb)refresh2("javascript:window.history.go(-1);","您要操作的记录不存在或已删除。");
+	return $rsdb;
+}
+function get_crm_group_select($other,$defaulf=false,$show_num=true){//获取CRM当前用户的分组select
+	global $pre,$db,$lfjid;
+	$query = $db->query("SELECT * FROM {$pre}crm_group WHERE username='$lfjid' ORDER BY `order` DESC");
+	$select="<select $other>";
+	while($rs = $db->fetch_array($query)){
+		if($show_num){//是否显示组下数量及可选
+			$rs[num_out]=$rs[num]?">$rs[name] - $rs[num] 位</option>":" disabled='disabled'>$rs[name] - 空组</option>";
+			if(strstr($defaulf,"|$rs[name]|")){
+				$select.="<option value='$rs[name]' selected='selected' $rs[num_out]";
+			}else{
+				$select.="<option value='$rs[name]' $rs[num_out]";
+			}
+		}else{
+			if(strstr($defaulf,"|$rs[name]|"))
+			$select.="<option selected='selected'>$rs[name]</option>";
+			else
+			$select.="<option>$rs[name]</option>";
+		}
+	}
+	return $select."</select>";
+}
+function post_sms_do($postdb){//简单发送和通讯录发送短信逻辑
+		global $timestamp,$db,$webdb,$lfjdb,$sms_price,$sms_length;
+		if($postdb[message]=="")die('{"name":"message","tips":"请输入发送的短信内容"}');
+		if($postdb[time]=="true"){//若为定时短信类型
+			if(!$postdb[time_date])die('{"name":"time_date","tips":"请设置定时发送的时间"}');
+			//判断定时短信必须大于当前时间
+			$time_val=strtotime("$postdb[time_date] $postdb[time_hh]:$postdb[time_ii]:00");
+			if($time_val<$timestamp)die('{"name":"time_date","tips":"您设置定时发送的时间必须大于当前时间"}');
+			//将定时发送的短信存在等待发送列表
+			if($post_sms_error=post_wait_sms($postdb[receiver],$postdb[message],$time_val)){
+					die('{"name":"ajax_submit","tips":"'.$post_sms_error.'"}');
+			};
+			die('{"name":"ok","tips":"恭喜您，短信已进入定时等待发送列表！","url":"'.$webdb[www_url].'/wait_post"}');
+			//PS:需要系统后台1分钟执行请求一次，若发现3分钟内存在队列，则即刻发送。
+		}else{//非定时短信则立即发送
+			$sms_words=mb_strlen($postdb[message],'gb2312');
+			$sms_num=(int)(($sms_words-1)/$sms_length)+1;//短信条数
+			$cost_num=count($postdb[receivers_arr])*$sms_num;//发送短信总数量
+			$send_money=$cost_num*$sms_price;//需要支付的费用
+			if($lfjdb[money]<$send_money)return "您的账号余额为".($lfjdb[money]/100)."元，本次发送{$sms_num}条短信，需要支付".($send_money/100)."元，请至少充值".(($send_money-$lfjdb[money])/100)."元";
+			//从当前帐户中减掉 $send_money 分
+			add_user($lfjdb[uid],$send_money*-1,"发送{$cost_num}条短信");
+			if($send_sms_result=send_sms(implode(',',$postdb[receiver]),$postdb[message]))die('{"name":"ajax_submit","tips":"'.$send_sms_result.'"}');
+			die('{"name":"ok","tips":"恭喜您，短信发送成功！","url":"'.$webdb[www_url].'/post_sms"}');
+		}
+}
+function get_receiver_array($receiver_temp){//校验过滤并获取接收号码，参数为数组对象
+		foreach($receiver_temp AS $key=>$value){
+				$value=str_replace(array("\n","\r","\t","'"),array("","","","\'"),trim($value));
+				if($value=="")continue;
+				if(strlen($value)>11){
+						die('{"name":"postdb[receiver]","tips":"接收号码：'.$value.' 的长度为'.strlen($value).'位不能大于11位"}');
+				}else if(strlen($value)<11){
+						die('{"name":"postdb[receiver]","tips":"接收号码：'.$value.' 的长度为'.strlen($value).'位不足11位"}');
+				}
+				if(preg_match("/^13[0-9]{9}$|15[0-9]{9}$|18[0-9]{9}$/",$value)){//规则：所有13、15、18开头的所有11位数字
+						//符合
+				}else{
+						//不符合
+						die('{"name":"receiver","tips":"接收号码：'.$value.' 不符合号码规则"}');
+				}
+				$receiver_arr[]=$value;
+		}
+		return $receiver_arr;
+}
+
 ?>

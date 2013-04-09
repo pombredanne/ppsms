@@ -45,7 +45,7 @@ if($job=="post"){
 				);
 				$userDB->edit_user($array);
 				die('{"name":"ok","tips":"恭喜您，联系方式修改成功！"}');
-		}else if($postdb[type]=="validate"){//账户认证
+		}/**else if($postdb[type]=="validate"){//账户认证
 				if($postdb[oicq]&&!ereg("^[0-9]{5,11}$",$postdb[oicq]))die('{"name":"postdb[oicq]","tips":"OICQ格式不符合规则！"}');
 				if($postdb[msn]&&!ereg("^[-a-zA-Z0-9_\.]+\@([0-9A-Za-z][0-9A-Za-z-]+\.)+[A-Za-z]{2,5}$",$postdb[msn]))die('{"name":"postdb[msn]","tips":"MSN不符合规则！"}');
 				if($postdb[postalcode]&&!ereg("^[0-9]{6}$",$postdb[postalcode]))die('{"name":"postdb[postalcode]","tips":"邮政编码格式不符合规则！"}');
@@ -60,7 +60,7 @@ if($job=="post"){
 				);
 				$userDB->edit_user($array);
 				die('{"name":"ok","tips":"恭喜您，认证方式修改成功！"}');
-		}else if($postdb[type]=="password"){//修改密码
+		}**/else if($postdb[type]=="password"){//修改密码
 				if(!$postdb[password])die('{"name":"postdb[password]","tips":"新密码不能为空，请填写！"}');
 				if($postdb[password]!=$postdb[password2])die('{"name":"postdb[password2]","tips":"重复输入密码与新密码不一致，请确认！"}');
 				if(!$postdb[old_password])die('{"name":"postdb[old_password]","tips":"修改密码必须输入旧密码！"}');

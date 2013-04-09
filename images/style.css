@@ -14,6 +14,7 @@ input[type="text"].w200,input[type="password"].w200{ width:200px}
 input[type="text"].w50,input[type="password"].w50{ width:50px}
 input.readonly[type="text"],input.readonly[type="password"]{ background:#f1f1f1; border-color:#CCC}
 textarea{ font-size:12px; border:1px solid #b3dbff; background:#f5fafd; padding:5px; margin:1px}
+select option span{ color:#ccc}
  a.button{ padding:10px 20px; margin:0 8px; letter-spacing:2px; font-size:14px; background:#3f95d6; border:1px solid #166dc1; color:#FFF;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;-moz-box-shadow:0px 1px 2px #3f95d6;-webkit-box-shadow:0px 1px 2px #3f95d6;box-shadow:0px 1px 2px #3f95d6}
 a.button:hover{ text-decoration:none; background:#56a2e6}
 a.disable,a.disable:hover{ color:#999; background:#f1f1f1;border:1px solid #ddd;-moz-box-shadow:0px 1px 2px #f1f1f1;-webkit-box-shadow:0px 1px 2px #f1f1f1;box-shadow:0px 1px 2px #f1f1f1}
@@ -111,11 +112,16 @@ div.item textarea{width:300px; height:150px;overflow-x:hidden; overflow-y:scroll
 div.item label{ padding-right:30px}
 div.item table.item_table{ text-align:center}
 div.item table.item_table tr{ border-bottom:1px dotted #E4F1FB; height:32px; line-height:32px}
+div.item table.item_table tr:hover{ background:#f2f9fd}
+div.item table.item_table tr:first-child:hover{ background:none}
+div.item table.item_table a{ margin:0 5px}
 div.item table.item_table2{ text-align:left}
 div.item div.item_tab_op{height:60px; line-height:60px; padding-left:0px}
 div.item div.item_tab_op a.button{ padding:5px 20px; margin:0}
 div.item div.item_tab_op span.pages{ float:right; padding-right:10px}
 div.sub_title{ color:#3E95D6; background:#f3f8fd; height:32px; line-height:32px; border-bottom:1px dotted #deeffb; margin:4px 18px 4px 18px; padding-left:5px}
+div.sub_title a{ color:#666; text-decoration:underline; margin-left:10px}
+div.sub_title a:hover{ color:#f60}
 ul.help_tips{margin:0 0 6px 0; padding-left:25px; color:#555555}
 ul.help_tips li{ padding:4px 0 4px 13px; background:url(li_dot.gif) no-repeat 0 10px}
 

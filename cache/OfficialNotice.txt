@@ -1,1 +1,0 @@
-<body onload='location.reload()'>MYSQL 连接数据库失败,请确定数据库用户名,密码设置正确<br><br>Can't connect to MySQL server on 'localhost' (10061)<br>2003

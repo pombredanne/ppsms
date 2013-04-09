@@ -9,18 +9,15 @@ EOT;
 print<<<EOT
 include-->
 <div class="main">
-        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">简单发送</a></div></div>
+        <div class="location"><div><a href="#">短信功能</a> <img src="$webdb[www_url]/images/location_arrow.gif"> <a href="#">客户通讯录发送</a></div></div>
         <div class="main_content"><form>
 		        <div class="page_title">
-                        <h1>简单发送</h1>
+                        <h1>客户通讯录发送</h1>
                 </div>
                 <div class="item">
-                		<div class="item_title">接收号码：</div>
-                        <div class="item_body"><textarea name="postdb[receiver]"></textarea></div>
-                        <div class="item_remarks">
-                        	一行一个手机号码<br>
-                            共 <span class="num">30</span> 个号码
-                        </div>
+                		<div class="item_title">接收分组：</div>
+                        <div class="item_body">$group_out</div>
+                        <div class="item_remarks">接收短信的客户分组，可以按住 CTRL 多选</div>
                 </div>
                 <div class="item">
                 		<div class="item_title">短信内容：</div>
@@ -82,7 +79,7 @@ include-->
                 </div>
                 <div class="item">
                 		<div class="item_body">
-                        		<a id="ajax_submit" name="ajax_submit" href="javascript:void(0)" class="button">发送短信</a>
+                        		<a id="ajax_submit" href="javascript:void(0)" class="button">发送短信</a>
                         </div>
                 </div>
         </form></div>
