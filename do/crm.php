@@ -49,7 +49,10 @@ if($action=="group"){
 	if(!$postdb[truename])die('{"name":"postdb[truename]","tips":"请填写客户姓名！"}');
 	if(!$postdb[mob])die('{"name":"postdb[mob]","tips":"请填写手机号码！"}');
 	if(!eregi("^1(3|5|8)([0-9]{9})$",$postdb[mob]) )die('{"name":"postdb[mob]","tips":"手机号码格式不正确！"}');
-	if($postdb[sex]=="")die('{"name":"postdb[sex]","tips":"请先把客户性别！"}');
+	//检测手机号码是否保存过
+	if($rsdb=$db->get_one("SELECT * FROM {$pre}crm WHERE username='$lfjid' AND mob='$postdb[mob]'"))
+	die('{"name":"postdb[mob]","tips":"手机号码：'.$rsdb[mob].' 已存在客户通讯录，姓名为'.$rsdb[truename].'，不能重复请修改！"}');
+	if($postdb[sex]=="")die('{"name":"postdb[sex]","tips":"请选择客户性别！"}');
 	$postdb[group]&&$group_out="|".implode("|",$postdb[group])."|";
 	if($postdb[postalcode]&&!ereg("^[0-9]{6}$",$postdb[postalcode]))die('{"name":"postdb[postalcode]","tips":"邮政编码格式不符合规则！"}');
 	if ($postdb[email]&&!ereg("^[-a-zA-Z0-9_\.]+\@([0-9A-Za-z][0-9A-Za-z-]+\.)+[A-Za-z]{2,5}$",$postdb[email]))die('{"name":"postdb[email]","tips":"邮箱不符合规则！"}');

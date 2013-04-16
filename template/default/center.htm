@@ -1,5 +1,11 @@
 <!--
 <?php
+$money_out=$lfjdb[money]/100;
+$lfjdb[regdate]=date("Y-m-d H:i",$lfjdb[regdate]);
+$lfjdb[lastvist]=date("Y-m-d H:i",$lfjdb[lastvist]);
+$lfjdb[lastip]="$lfjdb[lastip] &nbsp; &nbsp;来自：".ipfrom($lfjdb[lastip]);
+$wait_post=$db->get_one("SELECT count(slid) num FROM {$pre}sms_list WHERE username = '$lfjid' AND state LIKE '等待发送'");
+$crm=$db->get_one("SELECT count(crid) num FROM {$pre}crm WHERE username = '$lfjid'");
 print <<<EOT
 -->
 <body>
@@ -8,78 +14,63 @@ EOT;
 @include(html("side_menu"));
 print<<<EOT
 include-->
-<div class="content">
-        <div class="location"><strong>当前位置 ：</strong><a href="#">增值功能</a> &gt; <a href="#">发送记录</a></div>
-        <div class="kk_title"><h1>发送记录查询</h1></div>
-        <div class="kk_content">
-                <table width="100%" class="ui" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <th><input type="checkbox" /></th>
-                        <th>发送时间</th>
-                        <th>状态</th>
-                        <th>接收号码</th>
-                        <th>短信内容</th>
-                        <th>操作</th>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" /></td>
-                        <td>2012-10-26 23:22:32</td>
-                        <td>成功</td>
-                        <td>13737762836</td>
-                        <td>亲爱的会员，您好，欢迎登录什么什么做....</td>
-                        <td><a href="#">重发</a></td>
-                    </tr>
-                    <tr class="highlight">
-                        <td><input type="checkbox" /></td>
-                        <td>2012-10-26 23:22:32</td>
-                        <td>成功</td>
-                        <td>13737762836</td>
-                        <td>亲爱的会员，您好，欢迎登录什么什么做....</td>
-                        <td><a href="#">重发</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" /></td>
-                        <td>2012-10-26 23:22:32</td>
-                        <td>成功</td>
-                        <td>13737762836</td>
-                        <td>亲爱的会员，您好，欢迎登录什么什么做....</td>
-                        <td><a href="#">重发</a></td>
-                    </tr>
-                    <tr class="highlight">
-                        <td><input type="checkbox" /></td>
-                        <td>2012-10-26 23:22:32</td>
-                        <td>成功</td>
-                        <td>13737762836</td>
-                        <td>亲爱的会员，您好，欢迎登录什么什么做....</td>
-                        <td><a href="#">重发</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" /></td>
-                        <td>2012-10-26 23:22:32</td>
-                        <td>成功</td>
-                        <td>13737762836</td>
-                        <td>亲爱的会员，您好，欢迎登录什么什么做....</td>
-                        <td><a href="#">重发</a></td>
-                    </tr>
-                    <tr class="highlight">
-                        <td><input type="checkbox" /></td>
-                        <td>2012-10-26 23:22:32</td>
-                        <td>成功</td>
-                        <td>13737762836</td>
-                        <td>亲爱的会员，您好，欢迎登录什么什么做....</td>
-                        <td><a href="#">重发</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" /></td>
-                        <td>2012-10-26 23:22:32</td>
-                        <td>成功</td>
-                        <td>13737762836</td>
-                        <td>亲爱的会员，您好，欢迎登录什么什么做....</td>
-                        <td><a href="#">重发</a></td>
-                    </tr>
+<div class="main">
+        <div class="location"><div><a href="$webdb[www_url]/">首页</a></div></div>
+        <div class="main_content"><form><input type="hidden" name="action" value="$type">
+		        <div class="page_title">
+                        <h1>欢迎进入 拍拍送（PPSMS.COM） 短信发送平台</h1>
+                </div>
+                <div class="sub_title">帐户信息</div>
+				<div class="item">   
+                    <table width="100%" class="item_table" style="text-align:left">
+                        <tr>
+                            <td width="120">当前帐户</td>
+                            <td>$lfjid</td>
+                        </tr>
+                        <tr>
+                            <td>绑定邮箱</td>
+                            <td>$lfjdb[email]</td>
+                        </tr>
+                        <tr>
+                            <td>帐户余额</td>
+                            <td><span class="money">$money_out</span> 元 &nbsp; <a href="$webdb[www_url]/pay">充值</a>|<a href="$webdb[www_url]/money?type=list">消费记录</a></td>
+                        </tr>
+                        <tr>
+                            <td>等待发送的短信</td>
+                            <td>$wait_post[num] 条</td>
+                        </tr>
+                        <tr>
+                            <td>通讯录客户数</td>
+                            <td>$crm[num] 位 &nbsp; <a href="$webdb[www_url]/crm?type=add">新建客户</a></td>
+                        </tr>
+                        <tr>
+                            <td>注册时间</td>
+                            <td>$lfjdb[regdate]</td>
+                        </tr>
+                        <tr>
+                            <td>上次登录时间</td>
+                            <td>$lfjdb[lastvist]</td>
+                        </tr>
+                        <tr>
+                            <td>上次登录IP地址</td>
+                            <td>$lfjdb[lastip]</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="sub_title">客户服务</div>
+				<div class="item">   
+                    <table width="100%" class="item_table" style="text-align:left">
+                        <tr>
+                            <td width="120">技术支持</td>
+                            <td>QQ 28829724 / 5510068</td>
+                        </tr>
+                        <tr>
+                            <td>版权所有</td>
+                            <td>Powered by PPSMS 1.2 &copy; 2012-2013, <a href="http://www.ivtsoft.com/" target="_blank">Ivtsoft Inc.</a></td>
+                        </tr>
                 </table>
-                <div class="pages">第一页 第二页</div>
-        </div>
+				</div>
+        </form></div>
 </div>
 
 

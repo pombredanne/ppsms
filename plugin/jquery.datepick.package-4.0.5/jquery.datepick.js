@@ -2101,5 +2101,7 @@ $(function() {
 
 /* 本本增加，加载后自动对 有属性 plugin="date" 的对象增加控件*/
 $(function(){
-	$("[plugin='date']").datepick({dateFormat: 'yyyy-mm-dd'});
+	$("[plugin='date']").each(function(){
+		$(this).datepick({dateFormat: 'yyyy-mm-dd',minDate:$(this).attr("mindate")});
+	});
 });

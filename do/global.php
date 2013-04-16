@@ -214,22 +214,6 @@ function get_left_menu(){//»ñÈ¡×ó²à²Ëµ¥´úÂë
 		}
 		return $left_menu_out;
 }
-function post_wait_sms($receivers_arr,$message,$send_time){//½«ĞèÒª·¢ËÍµÄ¶ÌĞÅ´æÈëµÈ´ı·¢ËÍÁĞ±í
-		global $db,$pre,$lfjdb,$onlineip,$timestamp,$sms_price,$sms_length;
-		//¶ÌĞÅ»»ĞĞÕ¼Á½¸ö×Ö·ûÎÊÌâ
-		//Óà¶îÊÇ·ñ×ã¹»Ö§¸¶£¬¿Û³ıÓà¶î
-		$sms_words=mb_strlen($message,'gb2312');
-		$sms_num=(int)(($sms_words-1)/$sms_length)+1;//¶ÌĞÅÌõÊı
-		$cost_num=count($receivers_arr)*$sms_num;//·¢ËÍ¶ÌĞÅ×ÜÊıÁ¿
-		$send_money=$cost_num*$sms_price;//ĞèÒªÖ§¸¶µÄ·ÑÓÃ
-		if($lfjdb[money]<$send_money)return "ÄúµÄÕËºÅÓà¶îÎª".($lfjdb[money]/100)."Ôª£¬±¾´Î·¢ËÍ{$sms_num}Ìõ¶ÌĞÅ£¬ĞèÒªÖ§¸¶".($send_money/100)."Ôª£¬ÇëÖÁÉÙ³äÖµ".(($send_money-$lfjdb[money])/100)."Ôª";
-		//´Óµ±Ç°ÕÊ»§ÖĞ¼õµô $send_money ·Ö
-		add_user($lfjdb[uid],$send_money*-1,"·¢ËÍ{$cost_num}Ìõ¶ÌĞÅ");
-		//²åÈëµ½´ı·¢ËÍÁĞ±í
-		$db->query("INSERT INTO {$pre}sms_list(`slid` ,`receiver` ,`receiver_num` ,`message`,`message_words`  ,`message_num` ,`posttime` ,`sendtime` ,`lasttime` ,`state` ,`username` ,`ip` ,`cost_num` ,`cost_sum` ,`money` ,`remarks`)
-						VALUES (NULL , '".implode(",",$receivers_arr).",', '".count($receivers_arr)."', '$message', '$sms_words', '$sms_num', '$timestamp', '$send_time', '$timestamp', 'µÈ´ı·¢ËÍ', '$lfjdb[username]', '$onlineip', '$cost_num', '$send_money', '".($lfjdb[money]-$send_money)."', '')");
-		return false;
-}
 function post_invoice($postdb){//½«·¢Æ±ÉêÇë´æÈë·¢Æ±ÁĞ±í
 		global $db,$pre,$lfjid,$onlineip,$timestamp,$sms_price,$sms_length;
 		$postdb[money]=$postdb[money]*100;//Ôª×ª»»Îª·Ö
@@ -321,30 +305,47 @@ function get_crm_group_select($other,$defaulf=false,$show_num=true){//»ñÈ¡CRMµ±Ç
 	}
 	return $select."</select>";
 }
+function post_sms($postdb){//½«ĞèÒª·¢ËÍµÄ¶ÌĞÅ´æÈëµÈ´ı·¢ËÍÁĞ±í
+		global $db,$pre,$lfjdb,$onlineip,$timestamp,$sms_price,$sms_length;
+		//¡¾µÈ´ı±àĞ´Âğ£¿¡¿¶ÌĞÅ»»ĞĞÕ¼Á½¸ö×Ö·ûÎÊÌâ
+		//Óà¶îÊÇ·ñ×ã¹»Ö§¸¶£¬¿Û³ıÓà¶î
+		$sms_words=mb_strlen($postdb[message],'gb2312');
+		$sms_num=(int)(($sms_words-1)/$sms_length)+1;//¶ÌĞÅÌõÊı
+		$cost_num=count($postdb[receiver])*$sms_num;//·¢ËÍ¶ÌĞÅ×ÜÊıÁ¿
+		$send_money=$cost_num*$sms_price;//ĞèÒªÖ§¸¶µÄ·ÑÓÃ
+		if($lfjdb[money]<$send_money)return "ÄúµÄÕËºÅÓà¶îÎª".($lfjdb[money]/100)."Ôª£¬±¾´Î·¢ËÍ{$sms_num}Ìõ¶ÌĞÅ£¬ĞèÒªÖ§¸¶".($send_money/100)."Ôª£¬ÇëÖÁÉÙ³äÖµ".(($send_money-$lfjdb[money])/100)."Ôª";
+		//´Óµ±Ç°ÕÊ»§ÖĞ¼õµô $send_money ·Ö
+		add_user($lfjdb[uid],$send_money*-1,"·¢ËÍ{$cost_num}Ìõ¶ÌĞÅ");
+		if($postdb[send_time])$state="µÈ´ı·¢ËÍ";
+		else{
+			$state="·¢ËÍ³É¹¦";
+			$postdb[send_time]=$timestamp;
+			if($send_sms_result=send_sms(implode(',',$postdb[receiver]),$postdb[message]))return $send_sms_result;//·¢ËÍ
+		}
+		//²åÈëµ½¶ÌĞÅÁĞ±í
+		$db->query("INSERT INTO {$pre}sms_list(`slid` ,`receiver` ,`receiver_num` ,`message`,`message_words`  ,`message_num` ,`posttime` ,`sendtime` ,`lasttime` ,`state` ,`username` ,`ip` ,`cost_num` ,`cost_sum` ,`money` ,`remarks`) VALUES (NULL , '".implode(",",$postdb[receiver]).",', '".count($postdb[receiver])."', '$postdb[message]', '$sms_words', '$sms_num', '$timestamp', '$postdb[send_time]', '$timestamp', '$state', '$lfjdb[username]', '$onlineip', '$cost_num', '$send_money', '".($lfjdb[money]-$send_money)."', '')");
+		return false;
+}
 function post_sms_do($postdb){//¼òµ¥·¢ËÍºÍÍ¨Ñ¶Â¼·¢ËÍ¶ÌĞÅÂß¼­
 		global $timestamp,$db,$webdb,$lfjdb,$sms_price,$sms_length;
 		if($postdb[message]=="")die('{"name":"postdb[message]","tips":"ÇëÊäÈë·¢ËÍµÄ¶ÌĞÅÄÚÈİ"}');
 		if($postdb[time]=="true"){//ÈôÎª¶¨Ê±¶ÌĞÅÀàĞÍ
 			if(!$postdb[time_date])die('{"name":"postdb[time_date]","tips":"ÇëÉèÖÃ¶¨Ê±·¢ËÍµÄÊ±¼ä"}');
 			//ÅĞ¶Ï¶¨Ê±¶ÌĞÅ±ØĞë´óÓÚµ±Ç°Ê±¼ä
-			$time_val=strtotime("$postdb[time_date] $postdb[time_hh]:$postdb[time_ii]:00");
-			if($time_val<$timestamp)die('{"name":"postdb[time_date]","tips":"ÄúÉèÖÃ¶¨Ê±·¢ËÍµÄÊ±¼ä±ØĞë´óÓÚµ±Ç°Ê±¼ä"}');
+			$postdb[send_time]=strtotime("$postdb[time_date] $postdb[time_hh]:$postdb[time_ii]:00");
+			if($postdb[send_time]<$timestamp)die('{"name":"postdb[time_date]","tips":"ÄúÉèÖÃ¶¨Ê±·¢ËÍµÄÊ±¼ä±ØĞë´óÓÚµ±Ç°Ê±¼ä"}');
 			//½«¶¨Ê±·¢ËÍµÄ¶ÌĞÅ´æÔÚµÈ´ı·¢ËÍÁĞ±í
-			if($post_sms_error=post_wait_sms($postdb[receiver],$postdb[message],$time_val)){
+			if($post_sms_error=post_sms($postdb)){
 					die('{"name":"ajax_submit","tips":"'.$post_sms_error.'"}');
 			};
 			die('{"name":"ok","tips":"¹§Ï²Äú£¬¶ÌĞÅÒÑ½øÈë¶¨Ê±µÈ´ı·¢ËÍÁĞ±í£¡","url":"'.$webdb[www_url].'/wait_post"}');
 			//PS:ĞèÒªÏµÍ³ºóÌ¨1·ÖÖÓÖ´ĞĞÇëÇóÒ»´Î£¬Èô·¢ÏÖ3·ÖÖÓÄÚ´æÔÚ¶ÓÁĞ£¬Ôò¼´¿Ì·¢ËÍ¡£
 		}else{//·Ç¶¨Ê±¶ÌĞÅÔòÁ¢¼´·¢ËÍ
-			$sms_words=mb_strlen($postdb[message],'gb2312');
-			$sms_num=(int)(($sms_words-1)/$sms_length)+1;//¶ÌĞÅÌõÊı
-			$cost_num=count($postdb[receivers_arr])*$sms_num;//·¢ËÍ¶ÌĞÅ×ÜÊıÁ¿
-			$send_money=$cost_num*$sms_price;//ĞèÒªÖ§¸¶µÄ·ÑÓÃ
-			if($lfjdb[money]<$send_money)return "ÄúµÄÕËºÅÓà¶îÎª".($lfjdb[money]/100)."Ôª£¬±¾´Î·¢ËÍ{$sms_num}Ìõ¶ÌĞÅ£¬ĞèÒªÖ§¸¶".($send_money/100)."Ôª£¬ÇëÖÁÉÙ³äÖµ".(($send_money-$lfjdb[money])/100)."Ôª";
-			//´Óµ±Ç°ÕÊ»§ÖĞ¼õµô $send_money ·Ö
-			add_user($lfjdb[uid],$send_money*-1,"·¢ËÍ{$cost_num}Ìõ¶ÌĞÅ");
-			if($send_sms_result=send_sms(implode(',',$postdb[receiver]),$postdb[message]))die('{"name":"ajax_submit","tips":"'.$send_sms_result.'"}');
-			die('{"name":"ok","tips":"¹§Ï²Äú£¬¶ÌĞÅ·¢ËÍ³É¹¦£¡","url":"'.$webdb[www_url].'/post_sms"}');
+			if($post_sms_error=post_sms($postdb)){
+					die('{"name":"ajax_submit","tips":"'.$post_sms_error.'"}');
+			};
+			//·¢ËÍ³É¹¦ºó´æÈë·¢ËÍ¼ÇÂ¼ÁĞ±í
+			die('{"name":"ok","tips":"¹§Ï²Äú£¬¶ÌĞÅ·¢ËÍ³É¹¦£¡"}');
 		}
 }
 function get_receiver_array($receiver_temp){//Ğ£Ñé¹ıÂË²¢»ñÈ¡½ÓÊÕºÅÂë£¬²ÎÊıÎªÊı×é¶ÔÏó

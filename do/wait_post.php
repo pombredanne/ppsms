@@ -10,12 +10,14 @@ if($job=="post"){
 }
 if($job=="delete"){
 		if(!$id)die('{"name":"error","tips":"操作失败，删除对象的id未传递！"}');
-		//【等待编写】：获取等待发送的记录，若无则报错
-		if($rsdb=$db->get_one("SELECT * FROM {$pre}sms_list WHERE username='$lfjid' AND state='等待发送' AND slid<>$key "))
-		die('{"name":"postdb[old_group]['.$key.'][name]","tips":"修改的分组名称不能有重名，请修改"}');
+		//获取等待发送的记录，若无则报错
+		if(!$rsdb=$db->get_one("SELECT * FROM {$pre}sms_list WHERE username='$lfjid' AND state='等待发送' AND slid=$id "))
+		die('{"name":"del_'.$id.'","tips":"您要取消的等待发送短信不存在或已取消，请刷新后重试！"}');
 		
 		$db->query("UPDATE {$pre}sms_list SET state='取消发送' WHERE slid='$id' AND username='$lfjid' ");
-		//【等待编写】：计算费用总额并 返回增加用户金额。
+		//返回并增加用户金额。
+		add_user($lfjdb[uid],$rsdb[cost_sum],"取消等待发送的{$rsdb[cost_num]}条短信");
+		
 		die('{"name":"ok"}');
 }
 

@@ -9,6 +9,7 @@ body{ background:url(top_bg.gif) repeat-x}
 .green{ color:#093}
 .red{ color:#F00}
 .orange{ color:#F00}
+.money{ color:#FF2900; font-weight:bolder; font-size:14px}
 input[type="text"],input[type="password"]{ width:118px; height:20px; line-height:20px; border:1px solid #b3dbff; background:#f5fafd; padding:0; padding-left:5px; margin:1px}
 input[type="text"].w200,input[type="password"].w200{ width:200px}
 input[type="text"].w50,input[type="password"].w50{ width:50px}
@@ -119,7 +120,7 @@ div.item table.item_table2{ text-align:left}
 div.item div.item_tab_op{height:60px; line-height:60px; padding-left:0px}
 div.item div.item_tab_op a.button{ padding:5px 20px; margin:0}
 div.item div.item_tab_op span.pages{ float:right; padding-right:10px}
-div.sub_title{ color:#3E95D6; background:#f3f8fd; height:32px; line-height:32px; border-bottom:1px dotted #deeffb; margin:4px 18px 4px 18px; padding-left:5px}
+div.sub_title{ color:#3E95D6; background:#eef6fc; font-weight:700; height:32px; line-height:32px; border-bottom:1px dotted #deeffb; margin:4px 18px 4px 18px; padding-left:5px}
 div.sub_title a{ color:#666; text-decoration:underline; margin-left:10px}
 div.sub_title a:hover{ color:#f60}
 ul.help_tips{margin:0 0 6px 0; padding-left:25px; color:#555555}

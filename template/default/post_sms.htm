@@ -1,5 +1,6 @@
 <!--
 <?php
+$today=date("Y-m-d",$timestamp);
 print <<<EOT
 -->
 <body>
@@ -35,7 +36,7 @@ include-->
                 <div class="item">
                 		<div class="item_title">是否定时发送短信：</div>
                         <div class="item_body"><label><input name="postdb[time]" type="radio" value="true"> &nbsp;是</label><label><input checked name="postdb[time]" type="radio" value="false"> &nbsp;否</label>
-                        <br>设置：<input readonly name="postdb[time_date]" type="text" plugin="date" /> &nbsp; <select name="postdb[time_hh]">
+                        <br>设置：<input readonly name="postdb[time_date]" mindate="$today" type="text" plugin="date" /> &nbsp; <select name="postdb[time_hh]">
 <option>00</option>
 <option>01</option>
 <option>02</option>
